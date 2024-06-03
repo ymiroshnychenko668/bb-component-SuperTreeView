@@ -58,8 +58,7 @@
         });
       }
     } 
-    else if (itemSource === "custom" && customItems?.length > 0)
-    {
+    else if (itemSource === "custom" && customItems?.length > 0){
       _items = customItems?.map( v => { return {id: v.key, primaryDisplay: v.label} })  
     }  
     return _items;     
@@ -83,12 +82,10 @@
   {#key settings}
       
     {#if rows?.length > 0}
-      <ul
-      class:spectrum-TreeView--standalone={standalone}
+      <ul class:spectrum-TreeView--standalone={standalone}
       class:spectrum-TreeView--quiet={quiet}
       class="spectrum-TreeView spectrum-TreeView--size{size}"
-      style="width: {width}"
-    >
+      style="width: {width}">
 
       {#if title !== "" }
         <div class="spectrum-TreeView-heading">
@@ -97,21 +94,11 @@
       {/if}
 
       {#each rows as node, index}
-        <TreeItem 
-          key={node[nodeIDColumn]} 
-          icon={nodeIcon}
-          {selectable}
-          title={node[nodeValueColumn] || "Set the Node Key & Label Columns"} 
-          {size}
-          onClick={onNodeClick}> 
+        <TreeItem key={node[nodeIDColumn]} icon={nodeIcon} {selectable} title={node[nodeValueColumn] || "Set the Node Key & Label Columns"} {size} onClick={onNodeClick}> 
             {#each populateItems(index) as item }
-              <TreeItem 
-                {selectable} 
-                key={item.id} 
-                parentKey={node[nodeIDColumn]}
-                title={item.primaryDisplay} 
-                icon={itemIcon}
-                onClick={onNodeClick}></TreeItem>
+              <TreeItem {selectable} key={item.id} parentKey={node[nodeIDColumn]} title={item.primaryDisplay} icon={itemIcon} 
+              onClick={onNodeClick} children={item[itemRelColumn]}>
+              </TreeItem>
             {/each}      
         </TreeItem>  
       {/each}
