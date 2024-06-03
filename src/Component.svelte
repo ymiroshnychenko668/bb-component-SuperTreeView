@@ -38,9 +38,11 @@
   // Dynamically generates Node items on each Node iterations
   function populateItems( nodeIndex ) {
     let _items = []
+    console.error(nodeIndex)
 
     if (itemSource === "schema" && _isColumnEnumerable) 
     {
+      
       if (dataProvider?.schema[itemRelColumn]?.type === "link")
       {
         _items = rows[nodeIndex][itemRelColumn]
@@ -80,12 +82,11 @@
 <div use:styleable={$component.styles}>
 
   {#key settings}
-      
     {#if rows?.length > 0}
       <ul class:spectrum-TreeView--standalone={standalone}
       class:spectrum-TreeView--quiet={quiet}
       class="spectrum-TreeView spectrum-TreeView--size{size}"
-      style="width: {width}">
+      >
 
       {#if title !== "" }
         <div class="spectrum-TreeView-heading">
@@ -94,12 +95,17 @@
       {/if}
 
       {#each rows as node, index}
-        <TreeItem key={node[nodeIDColumn]} icon={nodeIcon} {selectable} title={node[nodeValueColumn] || "Set the Node Key & Label Columns"} {size} onClick={onNodeClick}> 
-            {#each populateItems(index) as item }
+      
+        <TreeItem {selectable} key={node[nodeIDColumn]} icon={nodeIcon} title={node[nodeValueColumn] || "Set the Node Key & Label Columns"} {size} onClick={onNodeClick} 
+        nodeIDColumn={nodeIDColumn} nodeValueColumn ={nodeValueColumn} itemRelColumn= {itemRelColumn} children={node[itemRelColumn]}> 
+          <span></span>
+            <!-- {#each node[itemRelColumn] as item }
               <TreeItem {selectable} key={item.id} parentKey={node[nodeIDColumn]} title={item.primaryDisplay} icon={itemIcon} 
-              onClick={onNodeClick} children={item[itemRelColumn]}>
+              onClick={onNodeClick} children={item[itemRelColumn]} nodeIDColumn={nodeIDColumn} itemRelColumn= {itemRelColumn}>
               </TreeItem>
-            {/each}      
+
+           
+            {/each}       -->
         </TreeItem>  
       {/each}
     </ul>

@@ -11,12 +11,19 @@
     export let size
     export let key = ""
     export let parentKey = null
-    export let children;
+    export let children = [];
+    export let nodeIDColumn;
+    export let itemRelColumn;
+    export let nodeValueColumn;
+    export let standalone = true
+    export let quiet = false
+    export let width = "250px"
+
 
     const selectedItems = getContext("selectedItems")
 
     function handleClick (event) {
-      if ($$slots.default)
+      if (children?.length>0)
         open = !open
       else {
         selected = selectable ? !selected : false; 
@@ -41,7 +48,7 @@
     }
 
     let iconSize = "ri-sm"
-    $: nodeType = parentKey ? "Item" : "Node"
+    $: nodeType = (children?.lenght==0 )? "Item" : "Node"
 
   </script>
   
@@ -50,28 +57,30 @@
     <li class:is-selected={selected} class:is-open={open} class="spectrum-TreeView-item">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <span on:click={handleClick}  class="spectrum-TreeView-itemLink" {href}> 
-      {#if $$slots.default}
+      {#if children?.length>0}
         <svg class="spectrum-Icon spectrum-UIIcon-ChevronRight100 spectrum-TreeView-itemIndicator" focusable="false" aria-hidden="true">
           <use xlink:href="#spectrum-css-icon-Chevron100" />
         </svg>
       {/if}
-      <span class="spectrum-TreeView-itemLabel">       
+      
+        <span class="spectrum-TreeView-itemLabel">       
           {#if icon}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <i class="{icon} {iconSize}" />
           {/if} 
           {title} 
+        </span>
       </span>
-      </span>
-      {#if $$slots.children && $$slots.children.lenght>0}
-        <ul class="spectrum-TreeView spectrum-TreeView--size{size}">
-          {#each $$slots.children as item}
-            <svelte:self {selectable} key={item.id} parentKey={item[nodeIDColumn]} 
-            title={item.primaryDisplay} icon={icon} onClick={onClick} children={item[itemRelColumn]}/>           
 
+      {#if children?.length>0}
+      <ul class="spectrum-TreeView spectrum-TreeView--size{size}" >         
+       {#each children as item}
+            <svelte:self {selectable} key={item[nodeIDColumn]} parentKey={key} 
+            title={item[nodeValueColumn]} icon={icon} onClick={onClick} children={item[itemRelColumn]} nodeIDColumn={nodeIDColumn} nodeValueColumn={nodeValueColumn} itemRelColumn= {itemRelColumn}/>           
           {/each}
         </ul>
       {/if}
+  
     </li>  
   
  
