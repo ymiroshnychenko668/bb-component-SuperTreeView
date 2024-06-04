@@ -98,10 +98,6 @@
                 "value": "schema"
               },
               {
-                "label": "Data provider",
-                "value": "provider"
-              },
-              {
                 "label": "Custom",
                 "value": "custom"
               }
@@ -162,31 +158,54 @@
       }, 
       {
         "section": true,
-        "name": "On Node Click",
+        "name": "Events",
         "settings": [
           {
             "type": "event",
-            "key": "onNodeClick",
+            "label": "On Click",
+            "key": "onClick",
             "context": [
               {
-                "label": "NodeType",
-                "key": "nodeType"
-              },
-              {
-                "label": "NodeKey",
+                "label": "nodeKey",
                 "key": "nodeKey"
               },
               {
-                "label": "NodeValue",
+                "label": "nodeValue",
                 "key": "nodeValue"
+              }
+            ]
+          },
+          {
+            "type": "event",
+            "label": "On Expand",
+            "key": "onExpand",
+            "context":[
+              {
+                "key": "nodeKey",
+                "label":"nodeKey"
               },
               {
-                "label": "SelectedItems",
-                "key": "selectedItems",
-                "type": "array"
+                "key": "nodeValue",
+                "label":"nodeValue"
+              }
+            ]
+          },
+          {
+            "type": "event",
+            "label": "On Collapse",
+            "key": "onCollapse",
+            "context":[
+              {
+                "key": "nodeKey",
+                "label":"nodeKey"
+              },
+              {
+                "key": "nodeValue",
+                "label":"nodeValue"
               }
             ]
           }
+
         ]
       }
     ]
