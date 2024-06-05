@@ -2,69 +2,127 @@
 //  import "../node_modules/@spectrum-css/treeview/dist/index-vars.css"
   
   import Welcome from "./lib/Welcome.svelte";
-  import TreeItem from "./lib/TreeItem.svelte";
-  import { getContext, setContext } from "svelte"
-  import { writable } from "svelte/store";
+  import { getContext } from "svelte"
+  import { children } from "svelte/internal";
 
-  const { styleable } = getContext("sdk")
+  const { styleable,Provider ,ContextScopes} = getContext("sdk")
   const component = getContext("component")
   const loading = getContext("loading")
-
-  export let onClick
-
-  export let quiet = false
-  export let standalone = true
-  export let selectable = false
-  export let title = ""
-  export let size
-  export let width = "250px"
 
   export let dataProvider 
   export let nodeIDColumn
   export let nodeValueColumn
-  export let nodeIcon
-
-  export let itemSource
   export let itemRelColumn
-  export let onExpand;
+  export let nodeIcon
+  
+  export let onClick
+  export let onExpand
+  export let onCollapse
 
-  const selectedItems = writable([])
+  export let selected = false
+  export let open = false
+  export let href = false
+    
 
-  setContext("selectedItems", selectedItems)
+  export let quiet = false
+  export let standalone = true
+  export let selectable = false
+  export let size
+  export let width = "250px"
+  export let scope = ContextScopes.Local
+
+
+
+  export let itemRel
+  let iconSize = "ri-sm"
+
+    // $: nodeType = (children?.lenght==0 )? "Item" : "Node"
+  // const selectedItems = writable([])
+  // setContext("selectedItems", selectedItems)
 
   // If the parent DataProvider is loading, fill the rows array with a number of empty objects 
   // corresponding to the DataProvider's page size; 
   // this allows skeleton loader components to be rendered further down the tree.
+  function handleExpanderClick(event){
+      if (children?.length>0){
+         if(!open){
+            open = true;
+            if(onExpand)
+              onExpand({nodeKey :node[nodeIDColumn], nodeValue : node[nodeValueColumn]})
+          }else{
+            open = false;
+            if(onExpand)
+              onCollapse({nodeKey :node[nodeIDColumn], nodeValue : node[nodeValueColumn]})
+          }
+
+      }
+    }
+    function handleClick (event) { 
+      if (onClick) {  
+        onClick({nodeKey :node[nodeIDColumn], nodeValue : node[nodeValueColumn]})
+      }
+    }
+
+
+    
   $: rows = $loading ? new Array(dataProvider?.limit > 20 ? 20 : dataProvider?.limit).fill({}) : dataProvider?.rows
-  $: _isColumnEnumerable = ( dataProvider?.schema ) ? ( dataProvider?.schema[itemRelColumn]?.type === "link" || dataProvider?.schema[itemRelColumn]?.type === "array" ) : false
-  $: settings = { selectable : selectable, 
-                  itemSource : itemSource, 
-                  itemRelColumn: itemRelColumn }
+  $: node = itemRel ? itemRel : rows?.length > 0 ? rows[0] : undefined
+  $: settings =   {
+    loading: $loading,
+    node: node
+  }
+
+
+  
 </script>
 
-<div use:styleable={$component.styles}>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+
   {#key settings}
-    {#if rows?.length > 0}
+    {#if node}
       <ul class:spectrum-TreeView--standalone={standalone} class:spectrum-TreeView--quiet={quiet} class="spectrum-TreeView spectrum-TreeView--size{size}">
-        {#if title !== "" }
-          <div class="spectrum-TreeView-heading">
-            <span class="spectrum-TreeView-itemLabel">{title.toUpperCase()}</span>
-          </div>
-        {/if}
-        {#each rows as node}
-          <TreeItem {selectable} onExpand={onExpand} onClick={onClick} key={node[nodeIDColumn]} icon={nodeIcon} title={node[nodeValueColumn] || "Set the Node Key & Label Columns"} {size} 
-            nodeIDColumn={nodeIDColumn} nodeValueColumn ={nodeValueColumn} itemRelColumn= {itemRelColumn} children={node[itemRelColumn]} > 
-            <span></span>
-          </TreeItem>  
-        {/each}
+         <li class:is-selected={selected} class:is-open={open} class="spectrum-TreeView-item">
+          <div  class="spectrum-TreeView-itemLink"> 
+              {#if node[itemRelColumn]?.length>0}
+                <span {href} on:click={handleExpanderClick} >
+                  <svg class="spectrum-Icon spectrum-UIIcon-ChevronRight100 spectrum-TreeView-itemIndicator" focusable="false" aria-hidden="true">
+                    <use xlink:href="#spectrum-css-icon-Chevron100" />
+                  </svg>
+                </span>
+              {/if}
+              <div use:styleable={$component.styles} class="spectrum-TreeView-itemLink" {href}>
+                <Provider data={{ ...node }} {scope}>
+                  <slot />  
+                </Provider> 
+              </div>
+            </div>
+            {#if node[itemRelColumn]?.length>0}
+               {#each node[itemRelColumn] as item, index}
+                  <svelte:self {selectable} itemRel={item} onClick={onClick} onCollapse={onCollapse} onExpand={onExpand} icon={nodeIcon}  
+                    nodeIDColumn={nodeIDColumn} nodeValueColumn={nodeValueColumn} itemRelColumn= {itemRelColumn}> 
+                    <slot></slot>
+                  </svelte:self>           
+                {/each} 
+          {/if}  
+          </li>   
     </ul>
     {:else}
       <Welcome> <slot /> </Welcome>
     {/if}
-  {/key}
-</div>
+    {/key}
+
 
 <style>
+    i {
+      margin-right: 0.25rem;
+    }
+    .spectrum-TreeView-itemLink{
+      
+    }
+    .spectrum-TreeView-itemLabel {
+      display: flex;
+      align-items: center;
+    }
   .wrapper {
     display: flex;
     flex-direction: row;

@@ -6,13 +6,28 @@
     "friendlyName": "Super TreeView",
     "description": "A TreeView Component for Budibase with Super Powers !",
     "icon": "Breakdown",
-    "hasChildren": false,
+    "hasChildren": true,
+
     "styles": [
       "padding",
       "background",
       "border",
       "shadow"
     ],
+    "context": [
+      {
+        "type": "schema",
+        "values": [
+          {
+            "label": "key",
+            "key": "key",
+            "type": "string",
+            "defaultValue": ""
+          }
+        ]
+      }
+      ]
+      ,
     "settings": [
       {
         "type": "text",
@@ -79,9 +94,16 @@
             "type": "icon",
             "key": "nodeIcon",
             "label": "Node Icon"
+          },
+          {
+            "type": "field",
+            "key": "nodeType",
+            "label":"Node type field"
           }
+          
         ]
       }, 
+      
       {
         "section": true,
         "name": "Items Settings",
