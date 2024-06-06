@@ -30,11 +30,6 @@
       ,
     "settings": [
       {
-        "type": "text",
-        "key": "title",
-        "label": "Title"
-      },
-      {
         "type": "select",
         "key": "size",
         "label": "Size",
@@ -47,21 +42,22 @@
         "defaultValue": "M"
       },
       {
-        "type": "select",
+        "type": "text",
         "key": "width",
         "label": "Width",
-        "options": [
-          {"label": "Normal", "value": "250px"},
-          {"label": "Wide", "value": "400px"},
-          {"label": "Full", "value": "100%"}
-        ],
-        "defaultValue": "250px"
+        "defaultValue": "100%"
+      },
+      {
+        "type": "boolean",
+        "key": "detached",
+        "label": "Detached"
       },
       {
         "type": "boolean",
         "key": "selectable",
         "label": "Selectable"
       },
+      
       {
         "type": "boolean",
         "key": "quiet",
@@ -87,20 +83,10 @@
           {
             "type": "field",
             "label": "Node Label Column",
-            "key": "nodeValueColumn",
-            "required": true
-          },
-          {
-            "type": "icon",
-            "key": "nodeIcon",
-            "label": "Node Icon"
-          },
-          {
-            "type": "field",
-            "key": "nodeType",
-            "label":"Node type field"
+            "key": "itemValueColumn",
+            "defaultValue":"none",
+            "required":false 
           }
-          
         ]
       }, 
       
@@ -154,15 +140,8 @@
               "value": "provider"
             }
           },
-          {
-            "type": "field",
-            "label": "Item Label Column",
-            "key": "itemValueColumn",
-            "dependsOn": {
-              "setting": "itemSource",
-              "value": "provider"
-            }
-          },
+          
+          
           {
             "type": "options",
             "key": "customItems",
