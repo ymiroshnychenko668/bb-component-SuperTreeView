@@ -8,83 +8,162 @@
     export let scope = ContextScopes.Local
     export let nodeIDColumn
     export let itemRelColumn
-    export let itemValueColumn
+    
 
     export let onExpand
     export let onCollapse
-    export let onClick
+    
     export let node
 
-    export let open = false
     export let selectable = false
 
-    export let detached = false
+    
     export let size = "S"
     export let width
-    export let quiet = false
     
-    function handleExpanderClick(event){
-      if (children?.length>0){
-         if(!open){
-            open = true;
-            if(onExpand)
-              onExpand({nodeKey :node[nodeIDColumn], nodeValue : node[nodeValueColumn]})
-          }else{
-            open = false;
-            if(onExpand)
-              onCollapse({nodeKey :node[nodeIDColumn], nodeValue : node[nodeValueColumn]})
-          }
+  
 
-      }
-    }
 
-    function onClickHandler(e){
-        alert('dasdasd');
-        selected = true;
-        if(onClick){
-            onClick({nodeKey :node[nodeIDColumn], nodeValue : node[nodeValueColumn]});
-        }
-    }
 
     $: selected = selectable&&selected
+    $: isExpandable = node?.children?.length>0
+    $: open = false
+    // $:  if (children?.length>0){
+    //      if(!open){
+    //         open = true;
+    //         if(onExpand)
+    //         alert("dasdsa")
+
+    //           onExpand({nodeKey :node[nodeIDColumn]})
+    //       }else{
+    //         open = false;
+    //         if(onExpand)
+    //           onCollapse({nodeKey :node[nodeIDColumn]})
+    //       }
+
+    //   }
 
 </script>
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-missing-attribute -->
+
 {#if node}
-<li class="spectrum-TreeView-item spectrum-TreeView-item--size{size}"  class:is-open={open}  class:is-selected={selected}>
-        <div class="spectrum-TreeView-itemLink" >
-                {#if node[itemRelColumn]?.length>0}
-                    <svg class="spectrum-Icon spectrum-UIIcon-ChevronRight100 spectrum-TreeView-itemIndicator" on:click={handleExpanderClick} focusable="false" aria-hidden="true">
-                        <use xlink:href="#spectrum-css-icon-Chevron100" />
-                    </svg>
-                {/if}
-        
+<details class="tree-nav__item" class:is-expandable={isExpandable} >
+
+ <summary class="tree-nav__item-title">
             <!-- {#if itemValueColumn} 
                 <span on:click={onClickHandler}>
                     {node[itemValueColumn]}
                 </span>
-            {/if} -->
-            
+            {/if}  -->
+
+          
+            <div class="tree-nav__item">
+                    <!-- {#if node[itemRelColumn]?.length>0}
+                    <svg  on:click={handleExpanderClick} focusable="false" aria-hidden="true">
+                        <use xlink:href="#spectrum-css-icon-Chevron100" />
+                    </svg> -->
+                <!-- {/if} -->
             <Provider data={{ ...node }} {scope} >
                 
                 <slot />  
                 
             </Provider>
-        
-        </div>
-        
-         
+            </div>
+        </summary>
+
       {#if node[itemRelColumn]?.length>0}
-        <ul class:spectrum-TreeView--detached={detached} class:spectrum-TreeView--quiet={quiet} 
-            class="spectrum-TreeView spectrum-TreeView--size{size}" use:styleable={$component.styles} style="width: {width};" >
             {#each node[itemRelColumn] as item, index}
               <svelte:self {selectable} node={item} size={size} onCollapse={onCollapse} onExpand={onExpand} 
-                nodeIDColumn={nodeIDColumn} itemRelColumn={itemRelColumn} nodeValueColumn={itemValueColumn}> 
+                nodeIDColumn={nodeIDColumn} itemRelColumn={itemRelColumn}> 
                 <slot></slot>
                </svelte:self>           
              {/each} 
-         </ul>
+      
     {/if}  
-    </li>   
+</details>        
 {/if}
+
+<style>
+    /*
+ Only custom marker for summary/details
+ For cross browser compatible styling hide Firefox's marker by setting summary { display: block }
+ and Chrome and Safari's marker by setting ::-webkit-details-marker {display: none;}
+*/
+/*
+ Only custom marker for summary/details
+ For cross browser compatible styling hide Firefox's marker by setting summary { display: block }
+ and Chrome and Safari's marker by setting ::-webkit-details-marker {display: none;}
+*/
+summary {
+  display: block;
+  cursor: pointer;
+  outline: 0; 
+}
+
+summary::-webkit-details-marker {
+    display: none;
+  }
+
+.tree-nav__item {
+  display: block;
+  white-space: nowrap;
+  position: relative;
+}
+.tree-nav__item.is-expandable::before {
+  border-left: 1px solid #333;
+  content: "";
+  height: 100%;
+  left: 0.8rem;
+  position: absolute;
+  top: 2.4rem;
+  height: calc(100% - 2.4rem);
+}
+.tree-nav__item .tree-nav__item {
+  margin-left: 2.4rem;
+}
+.tree-nav__item.is-expandable[open] > .tree-nav__item-title::before {
+  font-family: "ionicons";
+  transform: rotate(90deg);
+}
+.tree-nav__item.is-expandable > .tree-nav__item-title {
+  padding-left: 0;
+}
+.tree-nav__item.is-expandable > .tree-nav__item-title::before {
+  position: absolute;
+  will-change: transform;
+  transition: transform 300ms ease;
+  content: "\f125";
+  left: 0;
+  display: inline-block;
+  width: 1.6rem;
+  text-align: center;
+}
+
+.tree-nav__item-title {
+  cursor: pointer;
+  display: block;
+  outline: 0;
+  /* line-height: 3.2rem; */
+}
+.tree-nav__item-title .icon {
+  display: inline;
+  padding-left: 1.6rem;
+  margin-right: 0.8rem;
+  font-size: 1.4rem;
+  position: relative;
+}
+.tree-nav__item-title .icon::before {
+  top: 0;
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  width: 1.6rem;
+  text-align: center;
+}
+
+.tree-nav__item-title::-webkit-details-marker {
+  display: none;
+}
+  </style>
 

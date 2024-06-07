@@ -79,13 +79,6 @@
             "label": "Node Key Column",
             "key": "nodeIDColumn",
             "required": true
-          },
-          {
-            "type": "field",
-            "label": "Node Label Column",
-            "key": "itemValueColumn",
-            "defaultValue":"none",
-            "required":false 
           }
         ]
       }, 
