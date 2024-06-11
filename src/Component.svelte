@@ -10,7 +10,6 @@
 
 
   import TreeItem from "./lib/TreeItem.svelte";
-    import { listen } from "svelte/internal";
 
   const loading = getContext("loading")
 
@@ -24,13 +23,6 @@
   export let onCollapse
   export let onClick
 
-  export let selectable = false
-  
-  export let detached = true
-  export let quiet = true
-
-
-  export let size
   export let width
 
   $: rows = $loading ? new Array(dataProvider?.limit > 20 ? 20 : dataProvider?.limit).fill({}) : dataProvider?.rows
@@ -49,7 +41,7 @@
     <nav class="tree-nav" use:styleable={$component.styles}>
       {#each rows as row }
         <TreeItem nodeIDColumn={nodeIDColumn} itemRelColumn={itemRelColumn} onExpand={onExpand} onClick={onClick}
-         onCollapse={onCollapse} node={row} detached={detached} quiet={quiet}>
+         onCollapse={onCollapse} node={row}>
           <slot></slot>
         </TreeItem>
       {/each}

@@ -1,5 +1,4 @@
 <script>
-    import { children } from "svelte/internal";
     import { getContext } from "svelte"
     const { styleable,Provider ,ContextScopes} = getContext("sdk")    
     const component = getContext("component")
@@ -9,14 +8,10 @@
     export let nodeIDColumn
     export let itemRelColumn
     
-
     export let onExpand
     export let onCollapse
     
     export let node
-
-    export let selectable = false
-
     
     export let size = "S"
     export let width
@@ -25,8 +20,8 @@
 
 
 
-    $: selected = selectable&&selected
-    $: isExpandable = node?.children?.length>0
+   // $: selected = selectable&&selected
+    $: isExpandable = node[itemRelColumn]?.length>0
     $: open = false
     // $:  if (children?.length>0){
     //      if(!open){
@@ -74,7 +69,7 @@
 
       {#if node[itemRelColumn]?.length>0}
             {#each node[itemRelColumn] as item, index}
-              <svelte:self {selectable} node={item} size={size} onCollapse={onCollapse} onExpand={onExpand} 
+              <svelte:self  node={item} size={size} onCollapse={onCollapse} onExpand={onExpand} 
                 nodeIDColumn={nodeIDColumn} itemRelColumn={itemRelColumn}> 
                 <slot></slot>
                </svelte:self>           
