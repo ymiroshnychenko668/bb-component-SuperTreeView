@@ -14,29 +14,10 @@
     export let node
     
     export let size = "S"
-    export let width
     
-  
-
-
-
-   // $: selected = selectable&&selected
     $: isExpandable = node[itemRelColumn]?.length>0
     $: open = false
-    // $:  if (children?.length>0){
-    //      if(!open){
-    //         open = true;
-    //         if(onExpand)
-    //         alert("dasdsa")
 
-    //           onExpand({nodeKey :node[nodeIDColumn]})
-    //       }else{
-    //         open = false;
-    //         if(onExpand)
-    //           onCollapse({nodeKey :node[nodeIDColumn]})
-    //       }
-
-    //   }
 
 </script>
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -46,19 +27,7 @@
 <details class="tree-nav__item" class:is-expandable={isExpandable} >
 
  <summary class="tree-nav__item-title">
-            <!-- {#if itemValueColumn} 
-                <span on:click={onClickHandler}>
-                    {node[itemValueColumn]}
-                </span>
-            {/if}  -->
-
-          
             <div class="tree-nav__item">
-                    <!-- {#if node[itemRelColumn]?.length>0}
-                    <svg  on:click={handleExpanderClick} focusable="false" aria-hidden="true">
-                        <use xlink:href="#spectrum-css-icon-Chevron100" />
-                    </svg> -->
-                <!-- {/if} -->
             <Provider data={{ ...node }} {scope} >
                 
                 <slot />  

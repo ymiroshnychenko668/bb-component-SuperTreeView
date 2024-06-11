@@ -23,7 +23,7 @@
   export let onCollapse
   export let onClick
 
-  export let width
+  export let width = '100%'
 
   $: rows = $loading ? new Array(dataProvider?.limit > 20 ? 20 : dataProvider?.limit).fill({}) : dataProvider?.rows
   $: settings =   {
@@ -38,7 +38,7 @@
 
   {#key settings}
     {#if rows}
-    <nav class="tree-nav" use:styleable={$component.styles}>
+    <nav class="tree-nav" use:styleable={$component.styles} style="width: {width};">
       {#each rows as row }
         <TreeItem nodeIDColumn={nodeIDColumn} itemRelColumn={itemRelColumn} onExpand={onExpand} onClick={onClick}
          onCollapse={onCollapse} node={row}>
