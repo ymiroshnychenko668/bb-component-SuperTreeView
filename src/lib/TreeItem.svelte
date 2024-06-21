@@ -6,20 +6,14 @@
    
     export let scope = ContextScopes.Local
     export let nodeIDColumn
-    export let itemRelColumn
-    
-    export let onExpand
-    export let onCollapse
-    
+    export let itemRelColumn  
     export let node
-    
-    export let size = "S"
-    
+        
     $: isExpandable = node[itemRelColumn]?.length>0
-    $: open = false
 
 
 </script>
+
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-missing-attribute -->
 
@@ -38,8 +32,7 @@
 
       {#if node[itemRelColumn]?.length>0}
             {#each node[itemRelColumn] as item, index}
-              <svelte:self  node={item} size={size} onCollapse={onCollapse} onExpand={onExpand} 
-                nodeIDColumn={nodeIDColumn} itemRelColumn={itemRelColumn}> 
+              <svelte:self  node={item} nodeIDColumn={nodeIDColumn} itemRelColumn={itemRelColumn}> 
                 <slot></slot>
                </svelte:self>           
              {/each} 
@@ -49,6 +42,9 @@
 {/if}
 
 <style>
+    @import './ionicon.css';
+
+
     /*
  Only custom marker for summary/details
  For cross browser compatible styling hide Firefox's marker by setting summary { display: block }
@@ -62,12 +58,14 @@
 summary {
   display: block;
   cursor: pointer;
-  outline: 0; 
+  outline: 1; 
 }
 
 summary::-webkit-details-marker {
     display: none;
   }
+
+
 
 .tree-nav__item {
   display: block;
@@ -91,12 +89,14 @@ summary::-webkit-details-marker {
   transform: rotate(90deg);
 }
 .tree-nav__item.is-expandable > .tree-nav__item-title {
-  padding-left: 0;
+  /* padding-left: 2.4rem; */
 }
 .tree-nav__item.is-expandable > .tree-nav__item-title::before {
   position: absolute;
   will-change: transform;
   transition: transform 300ms ease;
+  font-family: "ionicons";
+  font-size: 1.1rem;
   content: "\f125";
   left: 0;
   display: inline-block;
@@ -108,12 +108,12 @@ summary::-webkit-details-marker {
   cursor: pointer;
   display: block;
   outline: 0;
-  /* line-height: 3.2rem; */
 }
 .tree-nav__item-title .icon {
   display: inline;
   padding-left: 1.6rem;
   margin-right: 0.8rem;
+  color: #666;
   font-size: 1.4rem;
   position: relative;
 }

@@ -19,29 +19,25 @@
   export let itemRelColumn
 
 
-  export let onExpand
-  export let onCollapse
-  export let onClick
-
   export let width = '100%'
 
   $: rows = $loading ? new Array(dataProvider?.limit > 20 ? 20 : dataProvider?.limit).fill({}) : dataProvider?.rows
   $: settings =   {
-    onExpand:onExpand,
-    onCollapse:onCollapse,
     itemRelColumn: itemRelColumn,
-    nodeIDColumn: nodeIDColumn
+    nodeIDColumn: nodeIDColumn,
+    width:width
   }
 </script>
-
+<style>
+  @import './lib/ionicon.css';
+</style>
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 
   {#key settings}
     {#if rows}
     <nav class="tree-nav" use:styleable={$component.styles} style="width: {width};">
       {#each rows as row }
-        <TreeItem nodeIDColumn={nodeIDColumn} itemRelColumn={itemRelColumn} onExpand={onExpand} onClick={onClick}
-         onCollapse={onCollapse} node={row}>
+        <TreeItem nodeIDColumn={nodeIDColumn} itemRelColumn={itemRelColumn} node={row}>
           <slot></slot>
         </TreeItem>
       {/each}

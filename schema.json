@@ -29,40 +29,12 @@
       ]
       ,
     "settings": [
-      {
-        "type": "select",
-        "key": "size",
-        "label": "Size",
-        "options": [
-          {"label": "Small", "value": "S"},
-          {"label": "Medium", "value": "M"},
-          {"label": "Large", "value": "L"},
-          {"label": "Extra Large", "value": "XL"}
-        ],
-        "defaultValue": "M"
-      },
+ 
       {
         "type": "text",
         "key": "width",
         "label": "Width",
         "defaultValue": "100%"
-      },
-      {
-        "type": "boolean",
-        "key": "detached",
-        "label": "Detached"
-      },
-      {
-        "type": "boolean",
-        "key": "selectable",
-        "label": "Selectable"
-      },
-      
-      {
-        "type": "boolean",
-        "key": "quiet",
-        "label": "Quiet", 
-        "dependsOn": "selectable"
       },
       {
         "section": true,
@@ -114,27 +86,7 @@
             },
             "info": "Must be a Relationship or Multi-Select field"
           },
-          {
-            "type": "dataProvider",
-            "label": "Item Provider",
-            "key": "itemDataProvider",
-            "required": true,
-            "dependsOn": {
-              "setting": "itemSource",
-              "value": "provider"
-            }
-          },
-          {
-            "type": "field",
-            "label": "Item Key Column",
-            "key": "itemIDColumn",
-            "dependsOn": {
-              "setting": "itemSource",
-              "value": "provider"
-            }
-          },
-          
-          
+                    
           {
             "type": "options",
             "key": "customItems",
@@ -142,65 +94,14 @@
               "setting": "itemSource",
               "value": "custom"
             }
-          },
-          {
-            "type": "icon",
-            "key": "itemIcon",
-            "label": "Item Icon"
           }
         ]
-      }, 
+        
+      },
       {
-        "section": true,
-        "name": "Events",
-        "settings": [
-          {
-            "type": "event",
-            "label": "On Click",
-            "key": "onClick",
-            "context": [
-              {
-                "label": "nodeKey",
-                "key": "nodeKey"
-              },
-              {
-                "label": "nodeValue",
-                "key": "nodeValue"
-              }
-            ]
-          },
-          {
-            "type": "event",
-            "label": "On Expand",
-            "key": "onExpand",
-            "context":[
-              {
-                "key": "nodeKey",
-                "label":"nodeKey"
-              },
-              {
-                "key": "nodeValue",
-                "label":"nodeValue"
-              }
-            ]
-          },
-          {
-            "type": "event",
-            "label": "On Collapse",
-            "key": "onCollapse",
-            "context":[
-              {
-                "key": "nodeKey",
-                "label":"nodeKey"
-              },
-              {
-                "key": "nodeValue",
-                "label":"nodeValue"
-              }
-            ]
-          }
-
-        ]
+        "type": "icon",
+        "key": "itemIcon",
+        "label": "Item Icon"
       }
     ]
   }
